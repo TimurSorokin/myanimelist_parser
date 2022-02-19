@@ -6,5 +6,10 @@ def test_all(year,season):
     data = scrap.get_data_set()
     print('\n',data[0])
 
+def check (year,season):
+    sc = Scrapper(year,season)
+
+
 if __name__ == '__main__':
-    test_all(2018,'winter')
+    #test_all(2018,'winter')
+    check('2021','fall')

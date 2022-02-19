@@ -9,7 +9,7 @@ class Informer:
         index = 0
         path = caller[1][1]
         for i in range(len(path)-1,0,-1):
-            if(path[i]=='/'):
+            if(path[i]=='/' or path[i] == '"\"'):
                 index = i
                 break
         file = path[i:len(path)]
