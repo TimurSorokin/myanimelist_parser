@@ -4,7 +4,6 @@ def test_all(year,season):
     scrap = Scrapper(year,season)
     scrap.process_data()
     data = scrap.get_data_set()
-    print('\n',data[0])
     scrap.export()
 
 def check (year,season):

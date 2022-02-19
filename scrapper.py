@@ -52,20 +52,24 @@ class Scrapper:
 
     def __build_data_set(self):
         self.__info.inform(0,'Building data in process...') 
-        response = self.__get_response_data()
-        data_set = []
-        if(response.status_code==200):
-            self.__info.inform(0,f'Response code: {response.status_code}')
-            soup = BS(response.text,'html.parser')
+        #response = self.__get_response_data()
+        data_set = {}
+        #resp.status_code should be 200
+        if(True):
+           # self.__info.inform(0,f'Response code: {response.status_code}')
+            file = open('test.html','r')
+            soup = BS(file.read(),'html.parser')
             list_div = soup.find_all('div',{'class':'seasonal-anime'})
             #Get Anime title, date, episodes, time and tags
             self.__info.inform(0,f'Estimated anime count: [{len(list_div)}]')
+            count = 0
+            data_set=[]
             for div in list_div:
                 title = div.find('a',{'class':'link-title'})
                 #Title
                 if(title!=None):
-                    data = {}
-                    data.update({'title':title.text})
+                    data ={}
+                    data.update({"title":title.text})
                     #Info: date,num episodes, duration
                     info = div.find('div',{'class':'info'})
                     info_array = []
@@ -73,12 +77,15 @@ class Scrapper:
                         if not value.text.isspace():
                             val = value.text.replace(' ','').replace('\n',r'')
                             info_array.append(val)
-                    data.update({'info':info_array})
+                    data.update({"info":info_array})
                      #Tags: Categories
-                    tags = div.find('div',{'class':'genres'})
+                    tags = div.find('div',{'class':'genres-inner'})
+                    categories_list = []
                     for tag in tags:
                         if not tag.text.isspace():
-                            data.update({'tags':tag.text.split()})
+                            category = tag.text.replace(' ','').replace('\n','')
+                            categories_list.append(category)
+                    data.update({"tags":categories_list})
                     #Rating
                     rate = div.find('div',{'class':'score'})
                     r = rate.text.replace(' ','').replace('\n',r'')
@@ -87,9 +94,10 @@ class Scrapper:
                     try:
                         rating = float(r)
                     except:
-                        rating = float('NaN')
-                    data.update({'rating':rating})
+                        rating = "null"
+                    data.update({"rating":rating})
                 data_set.append(data)
+                count+=1
         else:
             self.__info.inform(2,f'Response code: {response.status_code}')
         self.__info.inform(0,f'Processing finished. Processed anime count:[{len(data_set)}]')
@@ -103,5 +111,10 @@ class Scrapper:
         if(self.__data_extrator.is_alive()):
             self.__info.inform(1,'Data wasnt extracted yet. Waiting...')
         self.__data_extrator.join()
-        self.__info.inform(1,f"Data extracted. Data_set length: {len(self.__data_set)}")
+        #self.__info.inform(1,f"Data extracted. Data_set length: {len(self.__data_set)}")
         return self.__data_set
+    
+    def export(self):
+        with open('out.json','w') as output:
+            json.dump(self.__data_set,output,indent=2)
+        self.__info.inform(1,'Data was saved to out.json')
