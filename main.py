@@ -1,7 +1,6 @@
 from scrapper import Scrapper 
 
-scrap = Scrapper(2021,'fall')
-response = scrap.get_response_data()
-scrap.build_data_set(response)
+scrap = Scrapper(2019,'winter')
+scrap.process_data()
 data = scrap.get_data_set()
-print(data[0])
+print('\n',data[0])
