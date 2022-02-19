@@ -14,6 +14,7 @@ class Scrapper:
         if is_valid == False:
             self.__info.inform(2,f'Invalid input: {season} {year} Status: {is_valid}')
             exit()
+        self.__json = f"{year}-{season}.json"
         self.__url = 'https://myanimelist.net/anime/season/'+str(year)+'/'+season
         self.__headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0','Accept-Language':'es','Accept-Encoding':'gzip, deflate','Accept':'test/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Refer':'null'}
         self.__data_set = None
@@ -57,7 +58,7 @@ class Scrapper:
         #resp.status_code should be 200
         if(True):
            # self.__info.inform(0,f'Response code: {response.status_code}')
-            file = open('test.html','r')
+            file = open('t.html','r')
             soup = BS(file.read(),'html.parser')
             list_div = soup.find_all('div',{'class':'seasonal-anime'})
             #Get Anime title, date, episodes, time and tags
@@ -111,10 +112,10 @@ class Scrapper:
         if(self.__data_extrator.is_alive()):
             self.__info.inform(1,'Data wasnt extracted yet. Waiting...')
         self.__data_extrator.join()
-        #self.__info.inform(1,f"Data extracted. Data_set length: {len(self.__data_set)}")
+        self.__info.inform(1,f"Data extracted: data_set length:[{len(self.__data_set)}]")
         return self.__data_set
     
     def export(self):
-        with open('out.json','w') as output:
+        with open(self.__json,'w') as output:
             json.dump(self.__data_set,output,indent=2)
         self.__info.inform(1,'Data was saved to out.json')
