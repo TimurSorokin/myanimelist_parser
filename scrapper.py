@@ -72,11 +72,13 @@ class Scrapper:
             self.__info.inform(2,f'Response code: {response.status_code}')
         self.__info.inform(0,f'Processing finished. Processed anime count:[{len(data_set)}]')
         self.__data_set = data_set
-    def process_data(self):
-        self.__data_extrator.start()
+    def process_data(self): 
+        self.__info.inform(0,'Starting thread')
+        self.__data_extrator.start() 
     def get_data_set(self):
         if(self.__data_extrator.is_alive()):
             self.__info.inform(1,'Data wasnt extracted yet. Waiting...')
         self.__data_extrator.join()
         self.__info.inform(1,f"Data extracted. Data_set length: {len(self.__data_set)}")
         return self.__data_set
+

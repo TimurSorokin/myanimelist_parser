@@ -3,7 +3,7 @@ import inspect
 
 class Informer:
     def __init__(self):
-        self.__colors = ['\033[32m','\033[35m','\033[91m','\033[36m','\033[0m']
+        self.__colors = ['\033[32m','\033[33m','\033[91m','\033[36m','\033[0m','\033[35m']
         self.__code = ['[INFO]','[WARN]','[ERROR]'] 
     def __parse_caller(self,caller):
         index = 0
@@ -20,4 +20,4 @@ class Informer:
         if code < 0 or code > 2:
             print(f'{code} not a valid CODE')
         else:
-            print(f"{self.__colors[code]}->:{self.__code[code]}:[{datetime.now().time()}]: {msg} >> {self.__colors[3]}{caller} {self.__colors[4]}") 
+            print(f"{self.__colors[code]}->:{self.__code[code]}:[{datetime.now().time()}]:{self.__colors[5]}{msg} >> {self.__colors[3]}{caller} {self.__colors[4]}") 
