@@ -6,18 +6,18 @@ from informer import Informer
 
 class Scrapper: 
     def __init__(self,year,season):
-        self._url = 'https://myanimelist.net/anime/season/'+str(year)+'/'+season
-        self._headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0','Accept-Language':'es','Accept-Encoding':'gzip, deflate','Accept':'test/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Refer':'null'}
-        self._data_set = None
-        self._info = Informer()
-        self._info.inform(0,f'Received values: {season} {year}')
+        self.__url = 'https://myanimelist.net/anime/season/'+str(year)+'/'+season
+        self.__headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0','Accept-Language':'es','Accept-Encoding':'gzip, deflate','Accept':'test/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Refer':'null'}
+        self.__data_set = None
+        self.__info = Informer()
+        self.__info.inform(0,f'Received values: {season} {year}')
     def check_headers(self):
         r = requests.get('http://httpbin.org/headers',headers=self._headers)
         print(r.json()) 
     def get_response_data(self):
-        self._info.inform(0,f'Requesting response from: {self._url}')
-        response = requests.get(self._url,headers=self._headers)
-        self._info.inform(0,f'Response size: {len(response.text)}')
+        self.__info.inform(0,f'Requesting response from: {self.__url}')
+        response = requests.get(self.__url,headers=self.__headers)
+        self.__info.inform(0,f'Response size: {len(response.text)}')
         return response
     def parse_xml(self,xml):
         tree = ET.parse(xml)
@@ -32,11 +32,11 @@ class Scrapper:
     def build_data_set(self,response): 
         data_set = []
         if(response.status_code==200):
-            self._info.inform(0,f'Response code: {response.status_code}')
+            self.__info.inform(0,f'Response code: {response.status_code}')
             soup = BS(response.text,'html.parser')
             list_div = soup.find_all('div',{'class':'seasonal-anime'})
             #Get Anime title, date, episodes, time and tags
-            self._info.inform(0,f'Found div: class = "seasonal-anime": {len(list_div)}')
+            self.__info.inform(0,f'Found div: class = "seasonal-anime": {len(list_div)}')
             for div in list_div:
                 title = div.find('a',{'class':'link-title'})
                 #Title
@@ -62,15 +62,15 @@ class Scrapper:
                     try:
                         rating = float(r)
                     except:
-                        self._info.inform(2,f'Coudlnt parse: {r}. Assigned NaN')
+                        self.__info.inform(2,f'Coudlnt parse: {r}. Assigned NaN')
                         rating = float('NaN')
                     data.append(rating)
                 data_set.append(data)
         else:
-            self._info.inform(2,f'Response code: {response.status_code}')
-        self._info.inform(0,f'Processing finished. Total items: {len(data_set)}')
-        self._data_set = data_set
+            self.__info.inform(2,f'Response code: {response.status_code}')
+        self.__info.inform(0,f'Processing finished. Total items: {len(data_set)}')
+        self.__data_set = data_set
 
     def get_data_set(self):
-        self._info.inform(0,f"Scrapper's data set length: {len(self._data_set)}")
-        return self._data_set
+        self.__info.inform(0,f"Scrapper's data set length: {len(self.__data_set)}")
+        return self.__data_set
