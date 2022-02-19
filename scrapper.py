@@ -1,5 +1,6 @@
 import urllib.robotparser
 import requests
+import json
 import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup as BS
 from informer import Informer 
@@ -26,6 +27,7 @@ class Scrapper:
             year_in = int(year)
             return (season in season_list) and ((year_in>=1917) & (year_in <= actual_year))
         return False
+
     def check_headers(self):
         r = requests.get('http://httpbin.org/headers',headers=self._headers)
         print(r.json()) 
@@ -62,19 +64,21 @@ class Scrapper:
                 title = div.find('a',{'class':'link-title'})
                 #Title
                 if(title!=None):
-                    data = []
-                    data.append(title.text)
+                    data = {}
+                    data.update({'title':title.text})
                     #Info: date,num episodes, duration
                     info = div.find('div',{'class':'info'})
+                    info_array = []
                     for value in info:
                         if not value.text.isspace():
                             val = value.text.replace(' ','').replace('\n',r'')
-                            data.append(val)
+                            info_array.append(val)
+                    data.update({'info':info_array})
                      #Tags: Categories
                     tags = div.find('div',{'class':'genres'})
                     for tag in tags:
                         if not tag.text.isspace():
-                         data.append(tag.text.split())
+                            data.update({'tags':tag.text.split()})
                     #Rating
                     rate = div.find('div',{'class':'score'})
                     r = rate.text.replace(' ','').replace('\n',r'')
@@ -84,7 +88,7 @@ class Scrapper:
                         rating = float(r)
                     except:
                         rating = float('NaN')
-                    data.append(rating)
+                    data.update({'rating':rating})
                 data_set.append(data)
         else:
             self.__info.inform(2,f'Response code: {response.status_code}')
@@ -101,4 +105,3 @@ class Scrapper:
         self.__data_extrator.join()
         self.__info.inform(1,f"Data extracted. Data_set length: {len(self.__data_set)}")
         return self.__data_set
-
