@@ -1,7 +1,9 @@
+import json
 from scrapper import Scrapper 
 import sys
 import datetime
 from informer import Informer
+from reporter import Reporter
 
 info = Informer()
 
@@ -31,3 +33,6 @@ def test_all(year,season):
 if __name__ == '__main__':
     if(is_valid()):
         test_all('2018','winter')
+        with open ("winter-2018.json") as file:
+            rep = Reporter (file)
+            rep.show_json()
