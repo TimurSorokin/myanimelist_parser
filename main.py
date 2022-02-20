@@ -1,8 +1,10 @@
+import json
 from scrapper import Scrapper 
 import sys
 import datetime
 import os.path
 from informer import Informer
+from reporter import Reporter
 
 info = Informer()
 def __do_exist(season,year):
@@ -33,5 +35,6 @@ def test_all(year,season):
 if __name__ == '__main__':
     if(__validate_arguments() and not __do_exist(sys.argv[1],sys.argv[2])):
         test_all('2018','winter')
-    else:
-        info.inform(2,'Json exists. Print it')
+         with open ("winter-2018.json") as file:
+            rep = Reporter (file)
+            rep.show_json()
