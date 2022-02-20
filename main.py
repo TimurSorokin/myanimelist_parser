@@ -4,7 +4,7 @@ import datetime
 from informer import Informer
 
 info = Informer()
-
+#hello there
 def is_valid():
     info.inform(0,f'Validating {sys.argv}')
     status = False
