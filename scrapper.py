@@ -11,8 +11,8 @@ class Scrapper:
     def __init__(self,year,season,info):
         self.__info = info
         self.__info.inform(0,f'Received values: {season} {year}')
-        self.__json = f"{year}-{season}.json"
-        self.__url = 'https://myanimelist.net/anime/season/'+str(year)+'/'+season
+        self.__json = f"{season}-{year}.json"
+        self.__url = f'https://myanimelist.net/anime/season/{year}/{season}'
         self.__headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0','Accept-Language':'es','Accept-Encoding':'gzip, deflate','Accept':'test/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Refer':'null'}
         self.__data_set = None
         self.__data_extrator = Thread(target=self.__build_data_set,args=())     

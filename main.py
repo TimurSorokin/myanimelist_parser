@@ -28,7 +28,6 @@ def test_all(year,season):
     data = scrap.get_data_set()
     scrap.export()
 
-
 if __name__ == '__main__':
     if(is_valid()):
         test_all('2018','winter')
