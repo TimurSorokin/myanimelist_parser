@@ -35,6 +35,7 @@ def test_all(year,season):
 if __name__ == '__main__':
     if(__validate_arguments() and not __do_exist(sys.argv[1],sys.argv[2])):
         test_all('2018','winter')
-         with open ("winter-2018.json") as file:
+    else:
+        with open ("winter-2018.json") as file:
             rep = Reporter (file)
             rep.show_json()
