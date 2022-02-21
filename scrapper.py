@@ -74,11 +74,10 @@ class Scrapper:
                     rate = div.find('div',{'class':'score'})
                     r = rate.text.replace(' ','').replace('\n',r'')
                     #Parsing values
-                    rating = None
                     try:
                         rating = float(r)
                     except:
-                        rating = "null"
+                        rating = 'N/A'
                     data.update({"rating":rating})
                 data_set.append(data)
                 count+=1

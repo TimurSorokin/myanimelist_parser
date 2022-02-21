@@ -15,11 +15,9 @@ def __validate_year(year):
     min_limit = 1927
     max_limit = int(datetime.date.today().strftime('%Y'))
     return year.isdecimal and int(year)>=min_limit and int(year)<=max_limit
-
 def __validate_season(season):
     season_list = ['winter', 'spring', 'summer', 'fall']
     return season in season_list
-
 def __validate_arguments():
     status = True
     if(len(sys.argv)<3 or not __validate_season(sys.argv[1]) or not __validate_year(sys.argv[2])): 
@@ -38,4 +36,4 @@ if __name__ == '__main__':
     else:
         with open ("winter-2018.json") as file:
             rep = Reporter (file)
-            rep.show_json()
+            rep.show_json(5)
