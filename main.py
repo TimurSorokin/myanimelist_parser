@@ -36,4 +36,4 @@ if __name__ == '__main__':
     else:
         with open ("winter-2018.json") as file:
             rep = Reporter (file)
-            rep.show_json(5)
+            rep.show_json(15)
