@@ -10,11 +10,11 @@ import datetime
 class Scrapper: 
     def __init__(self,year,season,info):
         self.__info = info
-        self.__info.inform(0,f'Received values: {season} {year}')
-        self.__json = f"{season}-{year}.json"
+        self.__info.inform(0,f'Received values: {year} {season}')
+        self.__json = f"{year}{season}.json"
         self.__url = f'https://myanimelist.net/anime/season/{year}/{season}'
         self.__headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0','Accept-Language':'es','Accept-Encoding':'gzip, deflate','Accept':'test/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Refer':'null'}
-        self.__data_set = None
+        self.__data_set = {}
         self.__data_extrator = Thread(target=self.__build_data_set,args=())     
     def check_headers(self):
         r = requests.get('http://httpbin.org/headers',headers=self._headers)
@@ -36,13 +36,12 @@ class Scrapper:
         return robot_parser.can_fetch(self.user_agent,url) 
     def __build_data_set(self):
         self.__info.inform(0,'Building data in process...') 
-        #response = self.__get_response_data()
+        response = self.__get_response_data()
         data_set = {}
         #resp.status_code should be 200
-        if(True):
-           # self.__info.inform(0,f'Response code: {response.status_code}')
-            file = open('t.html','r')
-            soup = BS(file.read(),'html.parser')
+        if(response.status_code==200):
+            self.__info.inform(0,f'Response code: {response.status_code}')
+            soup = BS(response.text,'html.parser')
             list_div = soup.find_all('div',{'class':'seasonal-anime'})
             #Get Anime title, date, episodes, time and tags
             self.__info.inform(0,f'Estimated anime count: [{len(list_div)}]')
@@ -82,7 +81,7 @@ class Scrapper:
                 data_set.append(data)
                 count+=1
         else:
-            self.__info.inform(2,f'Response code: {response.status_code}')
+            self.__info.inform(2,f'Response code: {response.status_code}. Exiting...')
         self.__info.inform(0,f'Processing finished. Processed anime count:[{len(data_set)}]')
         self.__data_set = data_set
     def process_data(self): 
@@ -98,3 +97,4 @@ class Scrapper:
         with open(self.__json,'w') as output:
             json.dump(self.__data_set,output,indent=2)
         self.__info.inform(1,f'Data was saved to {self.__json}')
+

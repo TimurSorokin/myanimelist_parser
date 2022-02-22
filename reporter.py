@@ -45,13 +45,15 @@ class Reporter:
             title_cont = self.__build_container(title,max_title)
             rating_cont = self.__build_container(str(rating),max_rating)
             genre_cont = self.__build_container(genres,max_genres)
-            entry = (f'{id_cont}{ccolors.GREEN}{title_cont}{ccolors.BLUE}{rating_cont}{ccolors.MAGENTA}{genre_cont}{ccolors.DEFAULT}')  
+            color = ccolors.GREEN if i%2==0 else ccolors.CYAN
+            entry = (f'{id_cont}{color}{title_cont}{ccolors.BLUE}{rating_cont}{ccolors.MAGENTA}{genre_cont}{ccolors.DEFAULT}')  
+
             table.append(entry)
             print(entry)
     
     def show_json (self,num_entries):
-       data_json = json.load(self.__file)
-       data_json.sort(key=self.__sort_key,reverse=True)
-       if(num_entries == 'all'):
-           num_entries = len(data_json) 
-       self.__print_table(data_json,num_entries)
+        data_json = json.load(self.__file)
+        data_json.sort(key=self.__sort_key,reverse=True)
+        if(num_entries == 'all'):
+            num_entries = len(data_json) 
+        self.__print_table(data_json,num_entries)
