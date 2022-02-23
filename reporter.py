@@ -28,7 +28,7 @@ class Reporter:
         #max_title = self.__get_longest(data_json,'title',num_entries)+1
         max_title = 40
         max_rating = self.__get_longest(data_json,'rating',num_entries)+5
-        max_genres = self.__get_longest(data_json,'tags',num_entries) 
+        max_genres = 30 
         
         head_id = self.__build_container('ID',max_index,0,'_')
         head_title = self.__build_container('TITLE',max_title,0,'_')
