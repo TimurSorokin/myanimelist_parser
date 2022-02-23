@@ -14,7 +14,7 @@ class Scrapper:
         self.__json = f"{year}{season}.json"
         self.__url = f'https://myanimelist.net/anime/season/{year}/{season}'
         self.__headers = {'User-Agent':'Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0','Accept-Language':'es','Accept-Encoding':'gzip, deflate','Accept':'test/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8','Refer':'null'}
-        self.__data_set = {}
+        self.__data_set = []
         self.__data_extrator = Thread(target=self.__build_data_set,args=())     
     def check_headers(self):
         r = requests.get('http://httpbin.org/headers',headers=self._headers)
@@ -37,8 +37,8 @@ class Scrapper:
     def __build_data_set(self):
         self.__info.inform(0,'Building data in process...') 
         response = self.__get_response_data()
-        data_set = {}
         #resp.status_code should be 200
+        data_set=[]
         if(response.status_code==200):
             self.__info.inform(0,f'Response code: {response.status_code}')
             soup = BS(response.text,'html.parser')
@@ -46,7 +46,6 @@ class Scrapper:
             #Get Anime title, date, episodes, time and tags
             self.__info.inform(0,f'Estimated anime count: [{len(list_div)}]')
             count = 0
-            data_set=[]
             for div in list_div:
                 title = div.find('a',{'class':'link-title'})
                 #Title
@@ -82,19 +81,19 @@ class Scrapper:
                 count+=1
         else:
             self.__info.inform(2,f'Response code: {response.status_code}. Exiting...')
-        self.__info.inform(0,f'Processing finished. Processed anime count:[{len(data_set)}]')
         self.__data_set = data_set
+        self.__info.inform(0,f'Processing finished. Processed anime count:[{len(data_set)}]')
     def process_data(self): 
         self.__info.inform(0,'Starting thread')
-        self.__data_extrator.start() 
-    def get_data_set(self):
+        self.__data_extrator.start()  
+    def get_data(self):
         if(self.__data_extrator.is_alive()):
             self.__info.inform(1,'Data wasnt extracted yet. Waiting...')
         self.__data_extrator.join()
         self.__info.inform(1,f"Data extracted: data_set length:[{len(self.__data_set)}]")
-        return self.__data_set    
-    def export(self):
+        return self.__data_set
+    def export(self,data):
         with open(self.__json,'w') as output:
-            json.dump(self.__data_set,output,indent=2)
+            json.dump(data,output,indent=2)
         self.__info.inform(1,f'Data was saved to {self.__json}')
 
