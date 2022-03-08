@@ -1,4 +1,7 @@
 # myanimelist_parser
+Trying to get familiar with python and github
+
+
 -> python main.py year season numentries
 
 Examples:
