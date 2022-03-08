@@ -3,13 +3,13 @@
 
 Examples:
 
-python main.py 2013 winter all
+python main.py 2013 winter all ->
 *prints all animes from winter of 2013*
 
 
-python main.py 2013 winter 
+python main.py 2013 winter ->
 *also prints all animes from winter 2013*
 
 
-python main.py 2019 summer 15
+python main.py 2019 summer 15 ->
 prints 15 animes from summer 2019
