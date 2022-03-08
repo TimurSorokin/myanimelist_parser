@@ -4,13 +4,10 @@ import sys
 import datetime
 import os.path
 import sys
-from informer import Informer
 from reporter import Reporter
 
-info = Informer()
 def __do_exist(year,season):
     status = os.path.isfile(f'{year}{season}.json') 
-    info.inform(0,f'checking if file exists {season}{year}.json status: {status}')
     return status
 def __get_arguments():
     year = int(datetime.date.today().strftime('%Y'))
@@ -21,8 +18,8 @@ def __get_arguments():
         season = sys.argv[2]
         num = int(sys.argv[3])
     except:
-        info.inform(2,f'Couldnt parse given arguments. Default values were assigned instead.')
-    return [year,season,num]
+        print(f"Coudln't parse arguments {sys.argv}")
+        return [year,season,num]
 
 if __name__ == '__main__':
     arguments = __get_arguments()
@@ -32,7 +29,7 @@ if __name__ == '__main__':
             rep = Reporter (file)
             rep.show_json(int(arguments[2]))
     else:
-        scrap = Scrapper(arguments[0],arguments[1],info)
+        scrap = Scrapper(arguments[0],arguments[1])
         scrap.process_data()
         data = scrap.get_data()
         scrap.export(data)
