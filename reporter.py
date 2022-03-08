@@ -58,7 +58,7 @@ class Reporter:
     def show_data(self,num_entries):
         self.__data.sort(key=self.__sort_key,reverse=True)
         if(num_entries == 'all' or num_entries>len(self.__data)):
-            num_entries = len(data) 
+            num_entries = len(self.__data) 
         self.__print_table(self.__data,num_entries)
     def show_json (self,num_entries):
         data_json = json.load(self.__data)
